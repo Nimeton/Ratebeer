@@ -46,3 +46,5 @@ group :production do
    gem 'pg'
    gem 'rails_stdout_logging' 
 end
+
+gem 'debugger', :group => :development
