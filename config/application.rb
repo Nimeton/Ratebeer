@@ -60,5 +60,6 @@ module Ratebeer
     config.assets.version = '1.0'
 
     config.assets.initialize_on_precompile = false
+    config.autoload_paths += Dir["#{Rails.root}/lib"]
   end
 end
