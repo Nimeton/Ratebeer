@@ -1,7 +1,7 @@
 class BreweriesController < ApplicationController
 
-  before_filter :authenticate, :only => [:new, :create, :destroy]
-
+  #before_filter :authenticate, :only => [:destroy]
+  before_filter :ensure_that_admin, only: [:destroy]
   # GET /breweries
   # GET /breweries.json
   def index

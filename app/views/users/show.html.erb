@@ -38,6 +38,16 @@
 
 <% end %>
 
+<% favostyle = @user.favorite_style %>
+<% unless favostyle.nil? %>
+  <p>Favorite style: <%= favostyle %></p>
+<% end %>
+
+<% favobrewery = @user.favorite_brewery %>
+<% unless favobrewery.nil? %>
+  <p>Favorite brewery: <%= favobrewery.name %></p>
+<% end %>
+
 
 <% if currently_signed_in? @user %>
   <%= link_to 'Edit', edit_user_path(@user) %> |
