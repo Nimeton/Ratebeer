@@ -41,6 +41,10 @@ class MembershipsController < ApplicationController
   # POST /memberships
   # POST /memberships.json
   def create
+    user = User.find(current_user.id)
+    unless user.nil?
+      params[:membership][:user_id] = current_user.id
+    end
     @membership = Membership.new(params[:membership])
     respond_to do |format|
       if @membership.save

@@ -12,3 +12,4 @@ script:
 deploy:
   provider: heroku
   api_key: "eeee1a72-a26c-4ded-b7d5-a8c965f81f6d"
+  app: "rocky-beyond-6884"

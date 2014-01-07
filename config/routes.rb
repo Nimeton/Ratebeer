@@ -1,4 +1,7 @@
 Ratebeer::Application.routes.draw do
+  resources :styles
+
+
   resources :memberships
 
 
@@ -24,6 +27,12 @@ Ratebeer::Application.routes.draw do
   resources :sessions, :only => [:new, :create, :destroy]
   get 'signin', to: 'sessions#new'
   delete 'signout', to: 'sessions#destroy'
+
+  #get 'places' => 'places#index'
+  #post 'places' => 'places#search'
+
+  resources :places, :only => [:index, :show]
+    post "places" => "places#search"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

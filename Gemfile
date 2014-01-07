@@ -63,5 +63,8 @@ group :test do
   gem 'capybara'
   gem 'launchy'
   gem 'simplecov', :require => false
+  gem 'webmock'
 end
 
+gem 'httparty'
+gem "rails-settings-cached", "0.2.4"

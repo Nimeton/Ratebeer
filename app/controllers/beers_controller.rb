@@ -17,6 +17,8 @@ before_filter :ensure_that_signed_in, :except => [:index, :show]
   # GET /beers/1.json
   def show
     @beer = Beer.find(params[:id])
+    @rating = Rating.new
+    @rating.beer = @beer 
 
     respond_to do |format|
       format.html # show.html.erb
@@ -29,7 +31,8 @@ before_filter :ensure_that_signed_in, :except => [:index, :show]
   def new
     @beer = Beer.new
     @breweries = Brewery.all
-    @styles = ["Weizen", "Lager", "Pale ale", "IPA", "Porter"]
+    #@styles = ["Weizen", "Lager", "Pale ale", "IPA", "Porter"]
+    @styles = Style.all
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @beer }

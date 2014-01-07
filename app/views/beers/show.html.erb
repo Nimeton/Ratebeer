@@ -7,7 +7,7 @@
 
 <p>
   <b>Style:</b>
-  <%= @beer.style %>
+  <%= @beer.style.name %>
 </p>
 
 <p>
@@ -20,6 +20,16 @@
 <% else %>
  <p>beer has <%= pluralize(@beer.ratings.count, 'rating') %> , average <%= @beer.average_rating %> </p>
 <% end %>
+
+<h4>give a rating:</h4>
+
+<%= form_for(@rating) do |f| %>
+  <%= f.hidden_field :beer_id %>
+  score: <%= f.number_field :score %>
+  <%= f.submit %>
+<% end %>
+
+<p></p>
 
 <%= link_to 'Edit', edit_beer_path(@beer) %> |
 <%= link_to 'Back', beers_path %>

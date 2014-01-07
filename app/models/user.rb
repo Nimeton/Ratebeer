@@ -27,21 +27,22 @@ class User < ActiveRecord::Base
     favorite :brewery
   end
 
-  def favorite(attribute)
+  def favorite(category)
     return nil if ratings.empty?
-
-    groups = ratings.group_by { |r| r.beer.send attribute }
-    groups = average_ratings_for groups
-    groups.max_by { |key, avg_rating| avg_rating }[0]
+    rating_pairs = rated(category).inject([]) do |pairs, item|
+      pairs << [item, rating_average(category, item)]
+    end
+    rating_pairs.sort_by { |s| s.last }.last.first
   end
 
-  def average_ratings_for(groups)
-    groups.keys.each do |key|
-      sum = groups[key].inject(0.0) { |sum, rating| sum + rating.score }
-      groups[key] = sum / groups[key].count
-    end
+  def rating_average(category, item)
+    ratings_of_item = ratings.select{ |r|r.beer.send(category)==item }
+    return 0 if ratings_of_item.empty?
+    ratings_of_item.inject(0.0){ |sum ,r| sum+r.score } / ratings_of_item.count
+  end
 
-    groups
+  def rated category
+    ratings.map{ |r| r.beer.send(category) }.uniq
   end
 
 end
