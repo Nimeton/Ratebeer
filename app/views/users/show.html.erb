@@ -40,7 +40,7 @@
 
 <% favostyle = @user.favorite_style %>
 <% unless favostyle.nil? %>
-  <p>Favorite style: <%= favostyle %></p>
+  <p>Favorite style: <%= favostyle.name %></p>
 <% end %>
 
 <% favobrewery = @user.favorite_brewery %>

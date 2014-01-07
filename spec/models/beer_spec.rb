@@ -5,8 +5,10 @@ require 'spec_helper'
 #end
 
 describe Beer do
+  let(:style){ FactoryGirl.create(:style) }
+
   it "is not saved if it doesn't have a name" do
-    beer = Beer.create :style => "Lager"
+    beer = Beer.create :style => style
 
     expect(beer.valid?).to be(false)
     expect(Beer.count).to eq(0)
