@@ -3,7 +3,13 @@ class RatingsController < ApplicationController
   before_filter :ensure_that_signed_in, :except => [:index]
 
   def index
+
     @ratings = Rating.all
+    @topbeers = Beer.top(3)
+    @topbreweries = Brewery.top(3)
+    @topstyles = Style.top(3)
+    @topusers = User.top(3)
+    @recentratings = Rating.recent
 
     respond_to do |format|
       format.html # index.html.erb

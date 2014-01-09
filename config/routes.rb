@@ -2,7 +2,9 @@ Ratebeer::Application.routes.draw do
   resources :styles
 
 
-  resources :memberships
+  resources :memberships do
+    post 'confirm_member', :on => :member
+  end
 
 
   resources :beer_clubs
@@ -14,7 +16,9 @@ Ratebeer::Application.routes.draw do
   resources :beers
 
 
-  resources :breweries
+  resources :breweries do
+    post 'toggle_activity', :on => :member
+  end
 
   root :to => 'breweries#index'
   get 'kaikki_bisset', to: 'beers#index'
@@ -33,6 +37,8 @@ Ratebeer::Application.routes.draw do
 
   resources :places, :only => [:index, :show]
     post "places" => "places#search"
+
+  get 'beerlist' => 'beers#list'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

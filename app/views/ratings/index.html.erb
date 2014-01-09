@@ -1,12 +1,78 @@
 <h2>List of ratings</h2>
 
+<% cache "fragment_name", :expires_in => 10.minutes do %>
+
 <p>Number of ratings: <%= @ratings.count %> </p>
 
+<div class="row-fluid">
+	<div class="span4" >
+        <h2>Top beers</h2>
+        <%= render 'toptable', :objects => @topbeers %>
+    </div>
+
+    <div class="span4" >
+        <h2>Top breweries</h2>
+        <%= render 'toptable', :objects => @topbreweries %>
+    </div>
+
+    <div class="span4" >
+        <h2>Top styles</h2>
+        <%= render 'toptable', :objects => @topstyles %>
+    </div>
+</div>
+
+<h2>Most active users</h2>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th></th>
+      <th>favorite beer</th>
+      <th>favorite brewery</th>
+      <th>prefered style</th>
+      <th>ratings</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @topusers.each do |user| %>
+        <tr>
+          <td><%= user.username %></td>
+          <td><%= user.favorite_beer %></td>
+          <% favobrewery = user.favorite_brewery %>
+          <% if favobrewery.nil? %>
+            <td>no favorite</td>
+          <% else %>
+          	<td><%= favobrewery.name %></td>
+          <% end %>
+
+          <% favostyle = user.favorite_style %>
+          <% if favostyle.nil? %>
+            <td>no favorite</td>
+          <% else %>
+          	<td><%= favostyle.name %></td>
+          <% end %>
+          <td><%= user.ratings.count %></td>
+        </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>Recent ratings</h2>
 <ul>
- <% @ratings.each do |rating| %>
-   <!--<li> <%= rating.to_s %> </li>-->
-   <li> <%= rating %> <!--<%= link_to 'delete', rating, :method => :delete, data: { confirm: 'Are you sure?' } %>--> </li>
- <% end %> 
+	<% @recentratings.each do |r| %>
+      <li> <%= r %> by <%= link_to r.user.username, r.user %> </li>
+    <% end %>
 </ul>
 
-<%= link_to 'New Rating', new_rating_path %>
+<% end %>
+
+<!--
+<ul>
+ <% @ratings.each do |rating| %>
+   <li> <%= rating.to_s %> </li>
+   <li> <%= rating %> <%= link_to 'delete', rating, :method => :delete, data: { confirm: 'Are you sure?' } %> </li>
+ <% end %> 
+</ul>
+-->
+<div class="span3">
+	<%= link_to 'New Rating', new_rating_path, class:"btn btn-primary" %>
+</div>

@@ -17,6 +17,9 @@ class BeerClubsController < ApplicationController
     @membership = Membership.new
     @membership.beer_club = @beer_club 
 
+    @applications = @beer_club.memberships.where :confirmed => [false,nil]
+    
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @beer_club }
@@ -43,9 +46,14 @@ class BeerClubsController < ApplicationController
   # POST /beer_clubs.json
   def create
     @beer_club = BeerClub.new(params[:beer_club])
+    #@membership = Membership.new beer_club: @beer_club, user: current_user, confirmed: true
 
     respond_to do |format|
-      if @beer_club.save
+      if @beer_club.save 
+        @membership = Membership.create(:confirmed => true)
+        @beer_club.memberships << @membership
+        current_user.memberships << @membership
+
         format.html { redirect_to @beer_club, notice: 'Beer club was successfully created.' }
         format.json { render json: @beer_club, status: :created, location: @beer_club }
       else

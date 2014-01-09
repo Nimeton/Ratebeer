@@ -8,7 +8,7 @@
   <p>no ratings given</p>
 <% else %>
   <p>
-    has given <%= @user.ratings.count %> ratings, average <%= @user.average_rating %>
+    has given <%= @user.ratings.count %> ratings, average <%= round(@user.average_rating) %>
   </p>
 
   <ul>
@@ -16,7 +16,7 @@
       <li>
         <%= rating %> 
       <% if currently_signed_in? @user %>
-          <%= link_to 'delete', rating, :method => :delete, :data => { :confirm => 'Are you sure?' } %> 
+          <%= link_to 'delete', rating, :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => "btn btn-danger" %> 
       <% end %>
       </li>
     <% end %>
@@ -24,14 +24,28 @@
 
 <% end %>
 
-<% if @user.beer_clubs.empty? %>
+<% if @user.memberships.confirmed.empty? %>
   <p>No memberships</p>
 <% else %>
   <h3>Memberships: </h3>
   <ul>
-    <% @user.beer_clubs.each do |club| %>
+    <% @user.memberships.confirmed.each do |m| %>
       <li>
-        <%= link_to club.name , club %>
+        <%= link_to m.beer_club.name , m.beer_club %>
+      </li>
+    <% end %>
+  </ul>
+
+<% end %>
+
+<% if @pending_applications.empty? %>
+  <p>No applications pending for</p>
+<% else %>
+  <h3>Applications pending for: </h3>
+  <ul>
+    <% @pending_applications.each do |m| %>
+      <li>
+        <%= link_to m.beer_club.name , m.beer_club %>
       </li>
     <% end %>
   </ul>
@@ -48,9 +62,13 @@
   <p>Favorite brewery: <%= favobrewery.name %></p>
 <% end %>
 
+<% favobeer = @user.favorite_beer %>
+<% unless favobrewery.nil? %>
+  <p>Favorite beer: <%= favobeer.name %></p>
+<% end %>
+
 
 <% if currently_signed_in? @user %>
-  <%= link_to 'Edit', edit_user_path(@user) %> |
-  <%= link_to 'Destroy', @user, method: :delete, data: { confirm: 'Are you sure?' } %> |
+  <%= edit_and_destroy_buttons(@user) %>
 <% end %>
-<%= link_to 'Back', users_path %>
+<%= link_to 'Back', users_path, class:"btn btn-success" %>

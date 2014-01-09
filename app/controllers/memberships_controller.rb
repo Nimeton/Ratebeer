@@ -41,14 +41,19 @@ class MembershipsController < ApplicationController
   # POST /memberships
   # POST /memberships.json
   def create
+    if current_user.memberships.where(:beer_club_id => params[:membership][:beer_club_id]).count > 0
+      redirect_to beer_clubs_path
+      return
+    end
     user = User.find(current_user.id)
     unless user.nil?
       params[:membership][:user_id] = current_user.id
     end
     @membership = Membership.new(params[:membership])
+    @membership.confirmed = false
     respond_to do |format|
       if @membership.save
-        format.html { redirect_to @membership, notice: 'Membership was successfully created.' }
+        format.html { redirect_to current_user, notice: 'Membership was successfully created.' }
         format.json { render json: @membership, status: :created, location: @membership }
       else
         format.html { render action: "new" }
@@ -83,5 +88,12 @@ class MembershipsController < ApplicationController
       format.html { redirect_to memberships_url }
       format.json { head :no_content }
     end
+  end
+
+  def confirm_member
+    membership = Membership.find(params[:id])
+    membership.confirmed = true
+    membership.save
+    redirect_to :back
   end
 end

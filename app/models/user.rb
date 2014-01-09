@@ -9,9 +9,9 @@ class User < ActiveRecord::Base
   validates :username, length: { minimum:3, maximum:15 }
   validates_format_of :password, with: /\A.*[^[:alpha:]]+.*\Z/
 
-  has_many :ratings, :dependent => :destroy
+  has_many :ratings, :dependent => :destroy, :include => [ :beer => [:brewery, :style ] ]
   has_many :beers, :through => :ratings
-  has_many :memberships, :dependent => :destroy
+  has_many :memberships, :dependent => :destroy, :include => [:beer_club]
   has_many :beer_clubs,:through => :memberships
 
   def favorite_beer
@@ -44,5 +44,10 @@ class User < ActiveRecord::Base
   def rated category
     ratings.map{ |r| r.beer.send(category) }.uniq
   end
+
+  def self.top(n)
+    sorted_by_rating_in_desc_order = User.all.sort_by{ |user| -user.ratings.count }.first(n)
+  end
+
 
 end
