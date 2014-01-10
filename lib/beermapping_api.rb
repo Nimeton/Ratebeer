@@ -3,9 +3,9 @@ class BeermappingAPI
     Place # varmistaa, että luokan koodi on ladattu
     Time
     city = city.downcase
-    Rails.cache.write city, fetch_places_in(city), :expires_in => 1.hour if not Rails.cache.exist? city
+    Rails.cache.write city, [fetch_places_in(city), Time.now] if not Rails.cache.exist? city or (Rails.cache.read city)[1] < 1.hour.ago
 
-    Rails.cache.read city
+    (Rails.cache.read city)[0]
   end
 
   private
@@ -32,9 +32,9 @@ class BeermappingAPI
     Place
     Time
     city = city.downcase
-    Rails.cache.write city, fetch_scores_in(city), :expires_in => 1.hour if not Rails.cache.exist? city
+    Rails.cache.write city, [fetch_scores_in(city), Time.now] if not Rails.cache.exist? city or (Rails.cache.read city)[1] < 1.hour.ago
 
-    Rails.cache.read city
+    (Rails.cache.read city)[0]
   end
 
   def self.fetch_scores_in(city)
