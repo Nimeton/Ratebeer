@@ -30,6 +30,7 @@ class BeermappingAPI
 
   def self.scores_in(city)
     Place
+    Time
     city = city.downcase
     Rails.cache.write city, fetch_scores_in(city), :expires_in => 1.hour if not Rails.cache.exist? city
 
