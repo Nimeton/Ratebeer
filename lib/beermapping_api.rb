@@ -1,6 +1,7 @@
 class BeermappingAPI
   def self.places_in(city)
     Place # varmistaa, että luokan koodi on ladattu
+    Time
     city = city.downcase
     Rails.cache.write city, fetch_places_in(city), :expires_in => 1.hour if not Rails.cache.exist? city
 
