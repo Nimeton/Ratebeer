@@ -9,7 +9,6 @@ class BeermappingAPI
     (Rails.cache.read city)[0]
   end
 
-  private
 
   def self.fetch_places_in(city)
     url = "http://beermapping.com/webservice/loccity/#{key}/"
@@ -29,20 +28,19 @@ class BeermappingAPI
     Settings.beermapping_apikey
   end
 
-  def self.scores_in(city)
+  def self.scores_in(id)
     Place
     Time
 
-    city = city.downcase
-    Rails.cache.write city, [fetch_scores_in(city), Time.now] if not Rails.cache.exist? city or (Rails.cache.read city)[1] < 1.hour.ago
+    Rails.cache.write id, [fetch_scores_in(id), Time.now] if not Rails.cache.exist? id or (Rails.cache.read id)[1] < 1.hour.ago
 
-    (Rails.cache.read city)[0]
+    (Rails.cache.read id)[0]
   end
 
-  def self.fetch_scores_in(city)
-    url = "http://beermapping.com/webservice/locscore/#{key}/"
+  def self.fetch_scores_in(id)
+    url = "http://beermapping.com/webservice/locscore/#{key}/#{id}"
 
-    response = HTTParty.get "#{url}#{city.gsub(' ', '%20')}"
+    response = HTTParty.get "#{url}"
     scores = response.parsed_response["bmp_locations"]["location"]
 
     scores
